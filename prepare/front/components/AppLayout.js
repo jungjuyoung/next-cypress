@@ -1,4 +1,5 @@
-import React, {useState, useMemo} from 'react'
+import React, {useMemo} from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import Link from 'next/Link'
 import { Menu, Input, Row, Col } from 'antd';
@@ -15,8 +16,7 @@ const SearchWrapper = styled(Search)`
 `
 
 const AppLayout = ({children}) => {
-	const [isLogin, setIsLogin] = useState(false)
-
+	const {isLogin} = useSelector(state => state.user);
   return (
     <div>
 			<Menu mode="horizontal">
@@ -37,7 +37,7 @@ const AppLayout = ({children}) => {
 		</Menu>
 		<Row gutter={8}>
 		  <Col xs={24} md={6}>
-			  {isLogin? <UserProfile setIsLogin={setIsLogin}/> : <LoginForm setIsLogin={setIsLogin}/>}
+			  {isLogin? <UserProfile/> : <LoginForm/>}
 			</Col>
 		  <Col xs={24} md={12}>
 			  {children}
@@ -54,7 +54,7 @@ const AppLayout = ({children}) => {
   )
 }
 AppLayout.propTypes = {
-	children: PropTypes.node.isRequired
-}
+  children: PropTypes.node.isRequired,
+};
 
 export default AppLayout
