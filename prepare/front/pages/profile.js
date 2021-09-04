@@ -6,8 +6,8 @@ import NicknameEditForm from '../components/NicknameEditForm'
 import FollowList from '../components/FollowList'
 
 const Profile = () => {
-  const followList = [{nickname: '제로초'},{nickname:'삥'},{nickname:'홀리'}]
-  const followingList = [{nickname: '제로초'},{nickname:'빠삐용'},{nickname:'오피셜'}]
+  const followList = [{nickname: '모니'},{nickname:'태태'},{nickname:'코지'}]
+  const followingList = [{nickname: '쿠키'},{nickname:'빠삐코'},{nickname:'모찌떡'}]
   return (
     <>
       <Head>
