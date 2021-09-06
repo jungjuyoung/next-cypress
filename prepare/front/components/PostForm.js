@@ -21,7 +21,7 @@ const PostForm = ({}) => {
   )
   const onClickImageUpload = useCallback( 
     () => {
-    imageInput.current.clcik()
+    imageInput.current.click()
   },[imageInput.current])
 
   return (
