@@ -19,6 +19,11 @@ export const initialState = {
         nickName: '쿠키',
       },
       content:"이거 계속 연습하랬떠여~"
+    },{
+      User:{
+        nickName: '아하',
+      },
+      content:"또 왔네요~"
     }]
   }],
   imagesPaths:[],
@@ -29,6 +34,7 @@ const ADD_POST = 'ADD_POST'
 export const addPost = {
   type: ADD_POST
 }
+
 const dummyPost= {
   id: 2,
   content: '더미데이터 입니다.',
@@ -36,19 +42,20 @@ const dummyPost= {
     id:1,
     nickName: '모니'
   },
-  Images:[],
-  Comments:[]
+  Images: [],
+  Comments: [],
 }
+
 const reducer = (state= initialState, action) => {
   switch (action.type) {
 		case ADD_POST:
 		  return {
 				...state,
-				mainPosts:[dummyPost, ...state.mainPosts],
+				mainPosts:[...state.mainPosts, dummyPost],
 				postAdded:true
 			}
 	  default:
-		 return state
+		 return {...state}
 	  break;
   }
 

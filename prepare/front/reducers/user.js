@@ -1,7 +1,7 @@
 export const initialState = {
   isLogin: false,
   user: null,
-  signupDate: {},
+  signUpData: {},
   loginData: {},
 }
 
@@ -40,7 +40,7 @@ const reducer = (state= initialState, action) => {
       break;
 	
 		default:
-		  return state
+		  return {...state}
 			break;
 	}
 
