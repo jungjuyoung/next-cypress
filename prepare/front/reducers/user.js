@@ -1,10 +1,8 @@
 export const initialState = {
-  user: {
-    isLogin: false,
-    user: null,
-    signupDate: {},
-    loginData: {},
-  },
+  isLogin: false,
+  user: null,
+  signupDate: {},
+  loginData: {},
 }
 
 // action creator
