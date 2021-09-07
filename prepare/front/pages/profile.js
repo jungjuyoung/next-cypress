@@ -2,12 +2,12 @@ import React from 'react'
 import Head from 'next/head'
 
 import AppLayout from '../components/AppLayout'
-import NicknameEditForm from '../components/NicknameEditForm'
+import NickNameEditForm from '../components/NickNameEditForm'
 import FollowList from '../components/FollowList'
 
 const Profile = () => {
-  const followList = [{nickname: '모니'},{nickname:'태태'},{nickname:'코지'}]
-  const followingList = [{nickname: '쿠키'},{nickname:'빠삐코'},{nickname:'모찌떡'}]
+  const followList = [{nickName: '모니'},{nickName:'태태'},{nickName:'코지'}]
+  const followingList = [{nickName: '쿠키'},{nickName:'빠삐코'},{nickname:'모찌떡'}]
   return (
     <>
       <Head>

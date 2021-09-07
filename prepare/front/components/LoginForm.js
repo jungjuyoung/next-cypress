@@ -15,16 +15,15 @@ padding:10px;
 `
 
 const LoginForm = () => {
-  const  dispatch = useDispatch()
+  const dispatch = useDispatch()
   const [id, onChangeId] = useInput('')
   const [password, onChangePassword] = useInput('')
   
   const onSubmitForm = useCallback(
 		() => {
 			dispatch(loginAction(id, password))
-			console.log(id, password);
-		},
-		[id, password])
+		},[id, password]
+  )
 
   return (
     <FormWrapper  onFinish={onSubmitForm}>

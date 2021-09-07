@@ -1,11 +1,19 @@
+const dummyUser = {
+  id: 1,
+  nickName: '나디아',
+  Posts: [],
+  Followings: [],
+  Followers: [],
+};
+
 export const initialState = {
-  isLogin: false,
+  isLoggedIn: false,
   user: null,
   signUpData: {},
   loginData: {},
-}
+};
 
-// action creator
+// action creator (데이터를 동적으로 바꿔주는 액션)
 export const loginAction = (data) => {
   return {
     type: 'LOG_IN',
@@ -27,7 +35,7 @@ const reducer = (state= initialState, action) => {
       return {
         ...state,
         isLogin: true,
-        user: action.data,
+        user: dummyUser,
       }
       break;
     case 'LOG_OUT':
@@ -40,7 +48,7 @@ const reducer = (state= initialState, action) => {
       break;
 	
 		default:
-		  return {...state}
+		  return state
 			break;
 	}
 

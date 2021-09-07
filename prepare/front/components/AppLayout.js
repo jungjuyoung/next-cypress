@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import Link from 'next/Link'
@@ -9,14 +9,15 @@ import LoginForm from './LoginForm'
 
 import styled from 'styled-components'
 
-const {Search} = Input
+const { Search } = Input
 
 const SearchWrapper = styled(Search)`
  vertical-align:middle;
 `
 
 const AppLayout = ({children}) => {
-	const {isLogin} = useSelector(state => state.user);
+	const { isLogin } = useSelector(state => state.user);
+
   return (
     <div>
 			<Menu mode="horizontal">
@@ -34,22 +35,22 @@ const AppLayout = ({children}) => {
 				<Menu.Item key="signup">
 					<Link href="/signup"><a>회원가입</a></Link>
 				</Menu.Item>
-		</Menu>
-		<Row gutter={8}>
-		  <Col xs={24} md={6}>
-			  {isLogin? <UserProfile/> : <LoginForm/>}
+		 </Menu>
+		 <Row gutter={8}>
+		    <Col xs={24} md={6}>
+			    {isLogin? <UserProfile/> : <LoginForm/>}
+			  </Col>
+		    <Col xs={24} md={12}>
+			    {children}
+			  </Col>
+		    <Col xs={24} md={6}>
+			    <a href="https://github.com/jungjuyoung" target="_blank"
+				     rel="noreferrer noopener"
+				   >
+				   Nadia Github
+				  </a>
 			</Col>
-		  <Col xs={24} md={12}>
-			  {children}
-			</Col>
-		  <Col xs={24} md={6}>
-			  <a href="https://github.com/jungjuyoung" target="_blank"
-				  rel="noreferrer noopener"
-				>
-				  Nadia Github
-				</a>
-			</Col>
-		</Row>
+		 </Row>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react'
 import { Form, Input} from 'antd'
 
-const NicknameEditForm = () => {
+const NickNameEditForm = () => {
   const style = useMemo(() => ({marginBottom: '2px', border:'2px solid #d9d9d9', padding: '10px'}))
   return (
     <Form style={style}>
@@ -10,4 +10,4 @@ const NicknameEditForm = () => {
   )
 }
 
-export default NicknameEditForm
+export default NickNameEditForm

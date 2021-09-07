@@ -1,28 +1,28 @@
-import React,{useState,useCallback} from 'react'
-import {useSelector} from 'react-redux'
+import React, { useState, useCallback } from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { Card, Button, Avatar, Form, Input, List, Comment, Popover } from 'antd';
 import { RetweetOutlined, HeartTwoTone, HeartOutlined, MessageOutlined, EllipsisOutlined } from '@ant-design/icons';
 
 import PostImages from './PostImages'
+import CommentForm from './CommentForm'
 
 const PostCard = ({ post }) => {
-	const id = useSelector(state => state.user.me && state.user.me.id)
+	const id = useSelector(state => state.user.me?.id)
 	const [liked, setLiked] = useState(false)
 	const [commentFormOpended, setCommentFormOpended] = useState(false)
   const onToggleLike = useCallback(
 		() => {
 			setLiked(prev => !prev)
-		},
-		[],
+		},[]
 	)
   const onToggleCommentOpened = useCallback(
 		() => {
 			setCommentFormOpended(prev => !prev)
-		},
-		[],
+		},[]
 	)
+
   return (
     <div style={{marginBottom:20}}>
 		  <Card
@@ -59,10 +59,24 @@ const PostCard = ({ post }) => {
 			/>
       </Card>
 			{commentFormOpended && (
-				<div>댓글 부분</div>
+				<div>
+          <CommentForm post={post}/>
+          <List
+            header={`${post.Comments.length} 댓글`}
+            itemLayout="horizontal"
+            dataSource={post.Comments}
+            renderItem={(item) => (
+              <li>
+                <Comment
+                  author={item.User.nickName}
+                  avatar={<Avatar>{item.User.nickName[0]}</Avatar>}
+                  content={item.content}
+                />
+              </li>
+            )}
+          />
+        </div>
 			)}
-			{/* <CommentForm/>
-			<Comments/> */}
 		</div>
   )
 }
