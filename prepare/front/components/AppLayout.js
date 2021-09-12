@@ -12,17 +12,19 @@ import styled, { createGlobalStyle } from 'styled-components'
 const { Search } = Input
 
 const Global = createGlobalStyle`
-	.ant-row{
+	.ant-row {
 		margin-right: 0 !important;
 		margin-left: 0 !important;
 	}
-	.ant-col:first-child{
+
+	.ant-col:first-child {
 		padding-left: 0 !important;
 	}
-	.ant-col:last-child{
+
+	.ant-col:last-child {
 		padding-right: 0 !important;
 	}
-`
+`;
 
 const SearchWrapper = styled(Search)`
  vertical-align:middle;

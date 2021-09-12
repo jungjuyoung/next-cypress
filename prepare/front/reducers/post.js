@@ -8,6 +8,10 @@ export const initialState = {
     content: '첫 번째 게시글',
     Images: [{
       src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
+    }, {
+      src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
+    }, {
+      src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
     }],
     Comments: [{
       User: {
@@ -30,28 +34,28 @@ export const addPost = {
   type: ADD_POST
 }
 
-const dummyPost= {
+const dummyPost = {
   id: 2,
   content: '더미데이터 입니다.',
-  User:{
-    id:1,
+  User: {
+    id: 1,
     nickName: '징징이짱'
   },
   Images: [],
   Comments: [],
 }
 
-const reducer = (state= initialState, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
-		case ADD_POST:
-		  return {
-				...state,
-				mainPosts:[dummyPost, ...state.mainPosts],
-				postAdded:true
-			}
-	  default:
-		 return state
-	  break;
+    case ADD_POST:
+      return {
+        ...state,
+        mainPosts: [dummyPost, ...state.mainPosts],
+        postAdded: true
+      }
+    default:
+      return state
+      break;
   }
 
 }
