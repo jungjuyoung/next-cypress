@@ -6,7 +6,7 @@ export const initialState = {
         id: 1,
         nickName: "찌미",
       },
-      content: "오늘은 보람찬 하루였다. #오늘하루 #잘살았다.",
+      content: "#오늘은 보람찬 하루였다. #오늘하루 #잘살았다.",
       Images: [
         {
           src: "https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726",
