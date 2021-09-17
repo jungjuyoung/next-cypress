@@ -1,27 +1,33 @@
-import React, { useState, useCallback } from "react";
-import { Form, Input, Checkbox, Button } from "antd";
-import PropTypes from "prop-types";
+import React, { useCallback, useState, useEffect } from "react";
+import { Button, Checkbox, Form, Input } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import Router from "next/router";
+import Head from "next/head";
+
+import { SIGN_UP_REQUEST } from "../reducers/user";
 
 import AppLayout from "../components/AppLayout";
 import useInput from "../hooks/useInput";
 
-const TextInput = ({ value }) => {
-  return <h1>{value}</h1>;
-};
-
-TextInput.propTypes = {
-  value: PropTypes.string,
-};
-
 const Signup = () => {
+  const dispatch = useDispatch();
+  const { signUpLoading, me } = useSelector(state => state.user);
+
   const [passwordCheck, setPasswordCheck] = useState("");
   const [term, setTerm] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [termError, setTermError] = useState(false);
 
   const [email, onChangeEmail] = useInput("");
-  const [nickName, onChangeNickName] = useInput("");
+  const [nick, onChangeNick] = useInput("");
   const [password, onChangePassword] = useInput("");
+
+  useEffect(() => {
+    if (me) {
+      alert("로그인했으니 메인페이지로 이동합니다.");
+      Router.push("/");
+    }
+  }, [me && me.id]);
 
   const onSubmit = useCallback(() => {
     if (password !== passwordCheck) {
@@ -30,7 +36,15 @@ const Signup = () => {
     if (!term) {
       return setTermError(true);
     }
-  }, [password, passwordCheck, term]);
+    return dispatch({
+      type: SIGN_UP_REQUEST,
+      data: {
+        email,
+        password,
+        nick,
+      },
+    });
+  }, [email, password, passwordCheck, term]);
 
   const onChangePasswordCheck = useCallback(
     e => {
@@ -47,14 +61,16 @@ const Signup = () => {
 
   return (
     <AppLayout>
-      <Form onFinish={onSubmit}>
-        <TextInput value="이것은 텍스트인풋 컴포넌트의 텍스트이다." />
+      <Head>
+        <title>회원가입 | NodeBird</title>
+      </Head>
+      <Form onFinish={onSubmit} style={{ padding: 10 }}>
         <div>
-          <label htmlFor="user-email">이메일</label>
+          <label htmlFor="user-email">아이디</label>
           <br />
           <Input
-            type="email"
             name="user-email"
+            type="email"
             value={email}
             required
             onChange={onChangeEmail}
@@ -65,9 +81,9 @@ const Signup = () => {
           <br />
           <Input
             name="user-nick"
-            value={nickName}
+            value={nick}
             required
-            onChange={onChangeNickName}
+            onChange={onChangeNick}
           />
         </div>
         <div>
@@ -82,7 +98,7 @@ const Signup = () => {
           />
         </div>
         <div>
-          <label htmlFor="user-password-check">비밀번호 확인</label>
+          <label htmlFor="user-password-check">비밀번호체크</label>
           <br />
           <Input
             name="user-password-check"
@@ -97,22 +113,16 @@ const Signup = () => {
         </div>
         <div>
           <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
-            약관에 동의합니다.
+            제로초 말을 잘 들을 것을 동의합니다.
           </Checkbox>
           {termError && (
             <div style={{ color: "red" }}>약관에 동의하셔야 합니다.</div>
           )}
         </div>
         <div style={{ marginTop: 10 }}>
-          {!email || !term || !password ? (
-            <Button type="primary" htmlType="submit" disabled>
-              가입하기
-            </Button>
-          ) : (
-            <Button type="primary" htmlType="submit">
-              가입하기
-            </Button>
-          )}
+          <Button type="primary" htmlType="submit" loading={signUpLoading}>
+            가입하기
+          </Button>
         </div>
       </Form>
     </AppLayout>

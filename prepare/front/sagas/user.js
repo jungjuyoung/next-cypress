@@ -25,7 +25,7 @@ function logInAPI(data) {
 
 function* logIn(action) {
   try {
-    console.log(`saga login... action: ${JSON.stringify(action.data)}`);
+    console.log(`saga login LOG_IN_SUCCESS: ${JSON.stringify(action.data)}`);
     // const result = yield call(logInAPI);
     yield delay(1000);
     yield put({
