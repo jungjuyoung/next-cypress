@@ -9,12 +9,12 @@ const Profile = () => {
   const followList = [
     { nickname: "모니" },
     { nickname: "태태" },
-    { nickname: "코지" },
+    { nickname: "쿠기" },
   ];
   const followingList = [
-    { nickname: "쿠키" },
-    { nickname: "빠삐코" },
-    { nickname: "모찌떡" },
+    { nickname: "찌미" },
+    { nickname: "만두" },
+    { nickname: "모찌" },
   ];
   return (
     <>

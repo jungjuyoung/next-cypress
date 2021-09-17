@@ -25,7 +25,7 @@ function logInAPI(data) {
 
 function* logIn(action) {
   try {
-    console.log("saga logIn");
+    console.log(`saga login... action: ${JSON.stringify(action.data)}`);
     // const result = yield call(logInAPI);
     yield delay(1000);
     yield put({
@@ -47,6 +47,7 @@ function logOutAPI() {
 
 function* logOut() {
   try {
+    console.log("saga logout...");
     // const result = yield call(logOutAPI);
     yield delay(1000);
     yield put({
