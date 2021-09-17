@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Button, Checkbox, Form, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
@@ -8,6 +9,14 @@ import { SIGN_UP_REQUEST } from "../reducers/user";
 
 import AppLayout from "../components/AppLayout";
 import useInput from "../hooks/useInput";
+
+const TextInput = ({ value }) => {
+  return <h1>{value}</h1>;
+};
+
+TextInput.propTypes = {
+  value: PropTypes.string,
+};
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -65,6 +74,7 @@ const Signup = () => {
         <title>회원가입 | NodeBird</title>
       </Head>
       <Form onFinish={onSubmit} style={{ padding: 10 }}>
+        <TextInput value="이것은 테스트인풋 컴포넌트의 텍스트이다" />
         <div>
           <label htmlFor="user-email">아이디</label>
           <br />
