@@ -33,6 +33,7 @@ export const generateDummyPost = number =>
       content: faker.lorem.paragraph(),
       Images: [
         {
+          id: shortId.generate(),
           src: faker.image.image(),
         },
       ],
@@ -74,21 +75,21 @@ export const addComment = data => ({
 });
 
 const dummyPost = data => ({
-  id: shortId.generate(),
+  id: data.id,
   content: data.content,
   User: {
     id: 1,
-    nickname: "모니",
+    nickname: "나디아",
   },
   Images: [],
   Comments: [],
 });
 
 const dummyComment = data => ({
-  id: shortId.generate(),
+  id: data.id,
   content: data,
   User: {
-    id: 1,
+    id: shortId.generate(),
     nickname: "찌미",
   },
 });
