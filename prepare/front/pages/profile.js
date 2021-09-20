@@ -11,10 +11,10 @@ const Profile = () => {
   const { me } = useSelector(state => state.user);
   console.log(`me: ${JSON.stringify(me)}`);
   useEffect(() => {
-    if (!(me && me.id)) {
+    if (!me?.id) {
       Router.push("/");
     }
-  }, [me && me.id]);
+  }, [me?.id]);
 
   if (!me) {
     alert("로그인을 하지 않았습니다.");
