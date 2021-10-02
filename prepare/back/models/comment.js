@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       collate: "utf8mb4_general_ci", // 이모티콘 저장
     }
   );
-  // **) 관계형 belongsTo는 테이블에 id를 생성
+  // **) 관계형에서 belongsTo는 테이블 컬럼에 id를 생성
   Comment.associate = db => {
     db.Comment.belongsTo(db.User);
     db.Comment.belongsTo(db.Post);
