@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false, // 필수
       },
       // **) RetweetId (PostId 에서 RetweetId 로 바뀜)
-      // **) belongsTo를 설정 할 경우 아래처럼 테이블에 컬럼 id가 생성
-      // PostId 에서 { as: "Retweet" } 해서 아래처럼 바뀜
+      // **) belongsTo를 설정 할 경우 아래처럼 테이블에 컬럼 PostId가 생성
+      // PostId 에서 { as: "Retweet" }로 아래처럼 RetweetId로 바뀜
       // RetweetId
     },
     {
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Post.associate = db => {
     db.Post.belongsTo(db.User);
-    db.Post.belongsToMany(db.Hashtag);
+    db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" }); // post.addHashtags
     db.Post.hasMany(db.Comment);
     db.Post.hasMany(db.Image);
     // through는 테이블 이름을 바꿔줌. through가 중간테이블 이름을 Like 테이블로 설정.
