@@ -30,8 +30,11 @@ module.exports = (sequelize, DataTypes) => {
     db.User.hasMany(db.Post);
     db.User.hasMany(db.Comment);
     // through는 테이블 이름을 바꿔줌. through가 중간테이블 이름을 Like 테이블로 설정.
+    // as는 별칭
     db.User.belongsToMany(db.Post, { through: "Like", as: "Liked" });
+
     // 같은 테이블끼리 다대다 관계설정일때 foreignKey로 컬럼의 id를 바꿔줘서 구별함.
+    // foreignKey로 Follow 테이블의 컬럼의 id를 바꿔줌
     db.User.belongsToMany(db.User, {
       through: "Follow",
       as: "Followers",
