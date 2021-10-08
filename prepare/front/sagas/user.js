@@ -63,12 +63,10 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post("http://localhost:3065/user", data);
+  return axios.post("http://localhost:5000/user", data);
 }
 
 function* signUp(action) {
-  console.log(`@@ action: ${JSON.stringify(action)}`);
-
   try {
     const result = yield call(signUpAPI, action.data);
     console.log(`@@ saga/user의 sighUp result: ${result}`);
