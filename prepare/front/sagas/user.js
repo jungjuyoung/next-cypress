@@ -1,5 +1,5 @@
 import axios from "axios";
-import { all, delay, fork, put, takeLatest } from "redux-saga/effects";
+import { all, delay, fork, call, put, takeLatest } from "redux-saga/effects";
 
 import {
   FOLLOW_FAILURE,
@@ -62,14 +62,17 @@ function* logOut() {
   }
 }
 
-function signUpAPI() {
-  return axios.post("/api/signUp");
+function signUpAPI(data) {
+  return axios.post("http://localhost:3065/user", data);
 }
 
-function* signUp() {
+function* signUp(action) {
+  console.log(`@@ action: ${JSON.stringify(action)}`);
+
   try {
-    // const result = yield call(signUpAPI);
-    yield delay(1000);
+    const result = yield call(signUpAPI, action.data);
+    console.log(`@@ saga/user의 sighUp result: ${result}`);
+    // yield delay(1000);
     yield put({
       type: SIGN_UP_SUCCESS,
     });
