@@ -20,7 +20,9 @@ TextInput.propTypes = {
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading, me } = useSelector(state => state.user);
+  const { signUpLoading, signUpDone, signUpError, me } = useSelector(
+    state => state.user
+  );
 
   const [passwordCheck, setPasswordCheck] = useState("");
   const [term, setTerm] = useState(false);
@@ -28,8 +30,19 @@ const Signup = () => {
   const [termError, setTermError] = useState(false);
 
   const [email, onChangeEmail] = useInput("");
-  const [nick, onChangeNick] = useInput("");
+  const [nickname, onChangeNickname] = useInput("");
   const [password, onChangePassword] = useInput("");
+  useEffect(() => {
+    if (signUpDone) {
+      Router.push("/");
+    }
+  }, [signUpDone]);
+
+  useEffect(() => {
+    if (signUpError) {
+      alert(signUpError);
+    }
+  }, [signUpError]);
 
   useEffect(() => {
     if (me) {
@@ -50,7 +63,7 @@ const Signup = () => {
       data: {
         email,
         password,
-        nick,
+        nickname,
       },
     });
   }, [email, password, passwordCheck, term]);
@@ -91,9 +104,9 @@ const Signup = () => {
           <br />
           <Input
             name="user-nick"
-            value={nick}
+            value={nickname}
             required
-            onChange={onChangeNick}
+            onChange={onChangeNickname}
           />
         </div>
         <div>

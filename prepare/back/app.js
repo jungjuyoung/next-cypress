@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const postRouter = require("./routes/post");
 const userRouter = require("./routes/user");
 const db = require("./models");
@@ -14,6 +15,12 @@ db.sequelize
 // app.use는 app(express서버에)에 무언갈 장착해서 사용할 때 사용하는데
 // router에서 req.body를 사용할 수 있게 아래 use설정.
 // express.json()과 express.urlencoded() 둘이 프론트에서 보낸 데이터를 해석해서 req.body 에 넣어줌
+app.use(
+  cors({
+    origin: true,
+    credentials: false,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
