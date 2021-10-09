@@ -20,9 +20,8 @@ TextInput.propTypes = {
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { signUpLoading, signUpDone, signUpError, me } = useSelector(
-    state => state.user
-  );
+  const { signUpLoading, signUpDone, singUpDoneReset, signUpError, me } =
+    useSelector(state => state.user);
 
   const [passwordCheck, setPasswordCheck] = useState("");
   const [term, setTerm] = useState(false);
@@ -33,10 +32,16 @@ const Signup = () => {
   const [nickname, onChangeNickname] = useInput("");
   const [password, onChangePassword] = useInput("");
   useEffect(() => {
-    if (signUpDone) {
+    console.log(`사인업 페이지 singUpDone:${signUpDone},
+    singUpDoneReset: ${singUpDoneReset}`);
+
+    if (singUpDoneReset) {
+      alert(
+        `사인업 페이지에서 index로 넘어감 singUpDoneReset: ${singUpDoneReset}`
+      );
       Router.push("/");
     }
-  }, [signUpDone]);
+  }, [singUpDoneReset]);
 
   useEffect(() => {
     if (signUpError) {

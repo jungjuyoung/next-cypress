@@ -6,14 +6,23 @@ import PostForm from "../components/PostForm";
 import PostCard from "../components/PostCard";
 
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
+import { SIGN_UP_DONE_RESET } from "../reducers/user";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { me } = useSelector(state => state.user);
+  const { me, singUpDoneReset } = useSelector(state => state.user);
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
     state => state.post
   );
-  console.log(mainPosts);
+
+  useEffect(() => {
+    if (singUpDoneReset) {
+      dispatch({
+        type: SIGN_UP_DONE_RESET,
+      });
+    }
+  }, [singUpDoneReset]);
+
   useEffect(() => {
     dispatch({
       type: LOAD_POSTS_REQUEST,
