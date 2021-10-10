@@ -12,7 +12,6 @@ const App = ({ Component }) => {
         <meta charSet="utf-8" />
         <title>React Twitter Clone Coding</title>
       </Head>
-
       <Component />
     </>
   );

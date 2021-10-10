@@ -20,17 +20,20 @@ import {
 } from "../reducers/user";
 
 function logInAPI(data) {
-  return axios.post("/api/login", data);
+  return axios.post("/user/login", data);
 }
 
 function* logIn(action) {
   try {
-    console.log(`saga login LOG_IN_SUCCESS: ${JSON.stringify(action.data)}`);
-    // const result = yield call(logInAPI);
-    yield delay(1000);
+    console.log(`@@ saga login LOG_IN_SUCCESS: ${JSON.stringify(action.data)}`);
+    const result = yield call(logInAPI, action.data);
+    console.log(
+      `@@ saga login LOG_IN_SUCCESS result: ${JSON.stringify(result)}`
+    );
+    // yield delay(1000);
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     console.error(err);
@@ -42,7 +45,7 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post("/api/logout");
+  return axios.post("/user/logout");
 }
 
 function* logOut() {
@@ -63,19 +66,19 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post("http://localhost:5000/user", data);
+  return axios.post("/user", data);
 }
 
 function* signUp(action) {
   try {
     const result = yield call(signUpAPI, action.data);
-    console.log(`@@ sagas signUp result: ${result}`);
+    console.log(`@@ sagas signUp try result: ${result}`);
     // yield delay(1000);
     yield put({
       type: SIGN_UP_SUCCESS,
     });
   } catch (err) {
-    console.error(err);
+    console.error(`@@ sagas signUp err: ${err}`);
     yield put({
       type: SIGN_UP_FAILURE,
       error: err.response.data,
@@ -84,7 +87,7 @@ function* signUp(action) {
 }
 
 function followAPI() {
-  return axios.post("/api/follow");
+  return axios.post("/user/follow");
 }
 
 function* follow(action) {
@@ -105,7 +108,7 @@ function* follow(action) {
 }
 
 function unfollowAPI() {
-  return axios.post("/api/unfollow");
+  return axios.post("/user/unfollow");
 }
 
 function* unfollow(action) {

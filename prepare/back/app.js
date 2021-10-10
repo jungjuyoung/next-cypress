@@ -5,12 +5,16 @@ const userRouter = require("./routes/user");
 const db = require("./models");
 const app = express();
 
+const passportConfig = require("./passport");
+
 db.sequelize
   .sync()
   .then(() => {
     console.log("db 연결 성공...");
   })
   .catch(console.error);
+
+passportConfig();
 
 // app.use는 app(express서버에)에 무언갈 장착해서 사용할 때 사용하는데
 // router에서 req.body를 사용할 수 있게 아래 use설정.

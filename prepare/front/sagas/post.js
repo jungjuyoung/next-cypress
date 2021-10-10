@@ -27,7 +27,7 @@ import {
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 
 function loadPostsAPI(data) {
-  return axios.get("/api/posts", data);
+  return axios.get("/posts", data);
 }
 
 function* loadPosts(action) {
@@ -48,7 +48,7 @@ function* loadPosts(action) {
 }
 
 function addPostAPI(data) {
-  return axios.post("/api/post", data);
+  return axios.post("/post", data);
 }
 
 function* addPost(action) {
@@ -77,7 +77,7 @@ function* addPost(action) {
 }
 
 function removePostAPI(data) {
-  return axios.delete("/api/post", data);
+  return axios.delete("/post", data);
 }
 
 function* removePost(action) {
@@ -102,7 +102,7 @@ function* removePost(action) {
 }
 
 function addCommentAPI(data) {
-  return axios.post(`/api/post/${data.postId}/comment`, data);
+  return axios.post(`/post/${data.postId}/comment`, data);
 }
 
 function* addComment(action) {
