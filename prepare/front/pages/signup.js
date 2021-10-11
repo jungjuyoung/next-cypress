@@ -71,7 +71,7 @@ const Signup = () => {
         nickname,
       },
     });
-  }, [email, password, passwordCheck, term]);
+  }, [email, password, nickname, passwordCheck, term]);
 
   const onChangePasswordCheck = useCallback(
     e => {

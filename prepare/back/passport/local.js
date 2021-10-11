@@ -32,10 +32,12 @@ module.exports = () => {
           // 이메일이 존재하면 비밀번호 비교
           // 우리가 입력한 password와 DB에 저장된 password가 같은지 비교
           const result = await bcrypt.compare(password, user.password);
+          // result에 입력한 password와 DB에 저장된 password가 같은게 있다면 done으로 내려줌
           if (result) {
             // 200 ok 성공
             return done(null, user);
           }
+          // 우리가 입력한 password와 DB에 저장된 password가 같지 않으면 done으로 에러 내려줌
           return done(null, false, { reason: "비밀번호가 틀렸습니다." });
         } catch (error) {
           // 500에러
