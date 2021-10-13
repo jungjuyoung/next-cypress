@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { User } = require("../models");
+const { User, Post } = require("../models");
 const router = express.Router();
 const passport = require("passport");
 
@@ -14,7 +14,7 @@ router.post("/login", (req, res, next) => {
       return next(err);
     }
     if (info) {
-      // 클라이언트 에러 400
+      // 클라이언트 에러
       return res.status(401).send(info.reason);
     }
     // 성공하면 user에 사용자 정보객체를 가지고
@@ -26,7 +26,31 @@ router.post("/login", (req, res, next) => {
         console.log(loginErr);
         return next(loginErr);
       }
-      return res.status(200).json(user);
+      // passport의 req.login할때 내부적으로 쿠키를 만들어서
+      // res.setHeader('Cookie','cxlhy)를 프론트에(쿠키) 내려주고 알아서 세션이랑 연결
+      // 서버쪽에서 통째로 들고있는건 세션
+      // passport는 세션에 많은 정보를 들고있는 유저를 통째로 들고있으면
+      // 메모리가 버티지 못하기때문에 쿠키에 user의 id만 쿠키와 매칭시켜서 보관
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: user.id },
+        attributes: {
+          exclude: ["password"],
+        },
+        include: [
+          {
+            model: Post,
+          },
+          {
+            model: User,
+            as: "Followings",
+          },
+          {
+            model: User,
+            as: "Followers",
+          },
+        ],
+      });
+      return res.status(200).json(fullUserWithoutPassword);
     });
   })(req, res, next);
 });
@@ -53,6 +77,12 @@ router.post("/", async (req, res, next) => {
     console.error(error);
     next(error); // status 500
   }
+});
+
+router.post("/user/logout", (req, res, next) => {
+  req.logout();
+  req.session.destroy();
+  req.send("ok");
 });
 
 module.exports = router;

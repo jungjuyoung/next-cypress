@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import useInput from "../hooks/useInput";
@@ -17,18 +17,19 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { logInLoading } = useSelector(state => state.user);
+  const { logInLoading, logInError } = useSelector(state => state.user);
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
 
+  useEffect(() => {
+    if (logInError) {
+      alert(logInError);
+    }
+  }, [logInError]);
+
   const onSubmitForm = useCallback(() => {
     console.log(`LoingForm email:${email}, password:${password}`);
-    dispatch(
-      loginRequestAction({
-        type: LOG_IN_REQUEST,
-        data: { email, password },
-      })
-    );
+    dispatch(loginRequestAction({ email, password }));
   }, [email, password]);
 
   return (
