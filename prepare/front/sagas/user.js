@@ -25,7 +25,6 @@ function logInAPI(data) {
 
 function* logIn(action) {
   try {
-    console.log(`@@ saga login LOG_IN_SUCCESS: ${JSON.stringify(action.data)}`);
     const result = yield call(logInAPI, action.data);
     console.log(
       `@@ saga login LOG_IN_SUCCESS result: ${JSON.stringify(result)}`
@@ -51,8 +50,8 @@ function logOutAPI() {
 function* logOut() {
   try {
     console.log("saga logout...");
-    // const result = yield call(logOutAPI);
-    yield delay(1000);
+    yield call(logOutAPI);
+    // yield delay(1000);
     yield put({
       type: LOG_OUT_SUCCESS,
     });
@@ -72,13 +71,13 @@ function signUpAPI(data) {
 function* signUp(action) {
   try {
     const result = yield call(signUpAPI, action.data);
-    console.log(`@@ sagas signUp try result: ${result}`);
+    console.log(`@@ sagas signUp in try result: ${result}`);
     // yield delay(1000);
     yield put({
       type: SIGN_UP_SUCCESS,
     });
   } catch (err) {
-    console.error(`@@ sagas signUp err: ${err}`);
+    console.error(`@@ sagas in catch signUp err: ${err}`);
     yield put({
       type: SIGN_UP_FAILURE,
       error: err.response.data,

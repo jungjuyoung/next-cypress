@@ -7,6 +7,7 @@ const passport = require("passport");
 // user 로그인
 router.post("/login", (req, res, next) => {
   // POST / user / login
+  // console.log(`@@ routes user login req.body: ${JSON.stringify(req.body)}`);
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       // 서버에러 500

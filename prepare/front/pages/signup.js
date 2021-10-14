@@ -36,10 +36,10 @@ const Signup = () => {
     singUpDoneReset: ${singUpDoneReset}`);
 
     if (singUpDoneReset) {
-      alert(
-        `사인업 페이지에서 index로 넘어감 singUpDoneReset: ${singUpDoneReset}`
-      );
-      Router.push("/");
+      // alert(
+      //   `사인업 페이지에서 index로 넘어감 singUpDoneReset: ${singUpDoneReset}`
+      // );
+      Router.replace("/");
     }
   }, [singUpDoneReset]);
 
@@ -52,7 +52,7 @@ const Signup = () => {
   useEffect(() => {
     if (me) {
       alert("로그인했으니 메인페이지로 이동합니다.");
-      Router.push("/");
+      Router.replace("/");
     }
   }, [me && me.id]);
 
