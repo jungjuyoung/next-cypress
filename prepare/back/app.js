@@ -26,7 +26,7 @@ passportConfig();
 app.use(
   cors({
     origin: true,
-    credentials: false,
+    credentials: true, // 쿠키 전달하고싶으면 true
   })
 );
 app.use(express.json());
