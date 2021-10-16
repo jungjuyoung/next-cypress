@@ -26,9 +26,6 @@ function logInAPI(data) {
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data);
-    console.log(
-      `@@ saga login LOG_IN_SUCCESS result: ${JSON.stringify(result)}`
-    );
     // yield delay(1000);
     yield put({
       type: LOG_IN_SUCCESS,
@@ -71,7 +68,6 @@ function signUpAPI(data) {
 function* signUp(action) {
   try {
     const result = yield call(signUpAPI, action.data);
-    console.log(`@@ sagas signUp in try result: ${result}`);
     // yield delay(1000);
     yield put({
       type: SIGN_UP_SUCCESS,

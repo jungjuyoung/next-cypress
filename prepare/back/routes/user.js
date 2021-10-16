@@ -1,13 +1,15 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { User, Post } = require("../models");
-const router = express.Router();
 const passport = require("passport");
 
+const { User, Post } = require("../models");
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
+
+const router = express.Router();
+
 // user 로그인
-router.post("/login", (req, res, next) => {
+router.post("/login", isNotLoggedIn, (req, res, next) => {
   // POST / user / login
-  // console.log(`@@ routes user login req.body: ${JSON.stringify(req.body)}`);
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       // 서버에러 500
@@ -56,8 +58,8 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-router.post("/", async (req, res, next) => {
-  // POST / user
+router.post("/", isNotLoggedIn, async (req, res, next) => {
+  // POST /user/
   try {
     const exUser = await User.findOne({
       where: {
@@ -65,7 +67,7 @@ router.post("/", async (req, res, next) => {
       },
     });
     if (exUser) {
-      return res.status(403).send("이미 사용중인 아이디입니다.");
+      return res.status(403).send("이미 사용 중인 아이디입니다.");
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
     await User.create({
@@ -73,17 +75,17 @@ router.post("/", async (req, res, next) => {
       nickname: req.body.nickname,
       password: hashedPassword,
     });
-    res.status(200).send("ok");
+    res.status(201).send("ok");
   } catch (error) {
     console.error(error);
     next(error); // status 500
   }
 });
 
-router.post("/user/logout", (req, res, next) => {
+router.post("/logout", isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
-  req.send("ok");
+  res.send("ok");
 });
 
 module.exports = router;
