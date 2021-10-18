@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const { Post, Comment } = require("../models");
+const { Post, User, Comment, Image } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 router.post("/", isLoggedIn, async (req, res, next) => {
   // POST / post
-  console.log(`@@ post routers req.body: ${JSON.stringify(req.body)}`);
+  // console.log(`@@ post routers req.body: ${JSON.stringify(req.body)}`);
   try {
     // 저장
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
-    // 데이터 테이블간 관계
+    // 방금 생성한 게시글 가져오기
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [

@@ -13,7 +13,7 @@ module.exports = () => {
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await User.findOne({ where: { id } });
-      done(null, user); // req.user
+      done(null, user); // req.user에 복구한 사용자 데이터를 넣어줌.
     } catch (error) {
       console.error(error);
       done(error);

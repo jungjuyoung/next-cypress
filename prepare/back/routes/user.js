@@ -7,6 +7,42 @@ const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 const router = express.Router();
 
+router.get("/", async (req, res, next) => {
+  // GET / user
+  try {
+    if (req.user) {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.user.id },
+        attributes: {
+          exclude: ["password"],
+        },
+        include: [
+          {
+            model: Post,
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followings",
+            attributes: ["id"],
+          },
+          {
+            model: User,
+            as: "Followers",
+            attributes: ["id"],
+          },
+        ],
+      });
+      res.status(200).json(fullUserWithoutPassword);
+    } else {
+      res.status(200).json(null);
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // user 로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   // POST / user / login
@@ -23,6 +59,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
     // 성공하면 user에 사용자 정보객체를 가지고
     // passport의 req.login으로 로그인함
     // req에서 login을 사용할 수 있게 passport가 제공해줌
+    // req.login을 하면 동시에 passport.serializeUser로 감.
     return req.login(user, async loginErr => {
       // 여기는 우리서비스의 에러가 아니고, passport로그인의 에러임
       if (loginErr) {
@@ -42,14 +79,17 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         include: [
           {
             model: Post,
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followings",
+            attributes: ["id"],
           },
           {
             model: User,
             as: "Followers",
+            attributes: ["id"],
           },
         ],
       });
