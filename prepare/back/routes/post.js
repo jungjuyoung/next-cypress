@@ -21,9 +21,21 @@ router.post("/", isLoggedIn, async (req, res, next) => {
         },
         {
           model: Comment,
+          include: [
+            {
+              model: User, // 댓글 작성자
+              attributes: ["id", "nickname"],
+            },
+          ],
         },
         {
-          model: User,
+          model: User, // 게시글 작성자
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: User, // 좋아요 누른 사람
+          as: "Likers",
+          attributes: ["id"],
         },
       ],
     });
@@ -50,7 +62,16 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
       PostId: req.params.postId,
       UserId: req.user.id,
     });
-    res.status(201).json(comment);
+    const fullComment = await Comment.findOne({
+      where: { id: comment.id },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+      ],
+    });
+    res.status(201).json(fullComment);
   } catch (error) {
     console.error(error);
     next(error);

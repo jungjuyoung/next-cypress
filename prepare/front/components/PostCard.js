@@ -115,10 +115,16 @@ const PostCard = ({ post }) => {
 
 PostCard.propTypes = {
   post: PropTypes.shape({
+    id: PropTypes.number,
     User: PropTypes.object,
     content: PropTypes.string,
-    img: PropTypes.string,
-    createdAt: PropTypes.object,
-  }),
+    createdAt: PropTypes.string,
+    Comments: PropTypes.arrayOf(PropTypes.object),
+    Images: PropTypes.arrayOf(PropTypes.object),
+    Likers: PropTypes.arrayOf(PropTypes.object),
+    RetweetId: PropTypes.number,
+    Retweet: PropTypes.objectOf(PropTypes.any),
+  }).isRequired,
 };
+
 export default PostCard;

@@ -1,6 +1,3 @@
-import shortId from "shortid";
-import faker from "faker";
-
 import produce from "../util/produce";
 
 export const initialState = {
@@ -20,33 +17,6 @@ export const initialState = {
   addCommentDone: false,
   addCommentError: null,
 };
-
-export const generateDummyPost = number =>
-  Array(number)
-    .fill()
-    .map(() => ({
-      id: shortId.generate(),
-      User: {
-        id: shortId.generate(),
-        nickname: faker.name.findName(),
-      },
-      content: faker.lorem.paragraph(),
-      Images: [
-        {
-          id: shortId.generate(),
-          src: faker.image.image(),
-        },
-      ],
-      Comments: [
-        {
-          User: {
-            id: shortId.generate(),
-            nickname: faker.name.findName(),
-          },
-          content: faker.lorem.sentence(),
-        },
-      ],
-    }));
 
 export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
 export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
@@ -73,26 +43,6 @@ export const addComment = data => ({
   type: ADD_COMMENT_REQUEST,
   data,
 });
-
-// const dummyPost = data => ({
-//   id: data.id,
-//   content: data.content,
-//   User: {
-//     id: 1,
-//     nickname: "나디아",
-//   },
-//   Images: [],
-//   Comments: [],
-// });
-
-// const dummyComment = data => ({
-//   id: data.id,
-//   content: data,
-//   User: {
-//     id: shortId.generate(),
-//     nickname: "찌미",
-//   },
-// });
 
 // 이전 상태를 액션을 통해 다음 상태로 만들어내는 함수(불변성은 지키면서)
 const reducer = (state = initialState, action) =>
