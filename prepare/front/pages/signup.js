@@ -54,7 +54,7 @@ const Signup = () => {
       alert("로그인했으니 메인페이지로 이동합니다.");
       Router.replace("/");
     }
-  }, [me && me.id]);
+  }, [me?.id]);
 
   const onSubmit = useCallback(() => {
     if (password !== passwordCheck) {

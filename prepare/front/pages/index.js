@@ -14,6 +14,7 @@ const Home = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
     state => state.post
   );
+  console.log(`mainPosts: ${mainPosts}`);
 
   useEffect(() => {
     if (singUpDoneReset) {
@@ -27,9 +28,6 @@ const Home = () => {
     dispatch({
       type: LOAD_MY_INFO_REQUEST,
     });
-    dispatch({
-      type: LOAD_POSTS_REQUEST,
-    });
   }, []);
 
   useEffect(() => {
@@ -39,9 +37,10 @@ const Home = () => {
         document.documentElement.scrollHeight - 300
       ) {
         if (hasMorePosts && !loadPostsLoading) {
+          const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
             type: LOAD_POSTS_REQUEST,
-            data: mainPosts[mainPosts.length - 1].id,
+            lastId,
           });
         }
       }

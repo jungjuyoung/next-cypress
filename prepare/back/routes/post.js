@@ -5,7 +5,7 @@ const { isLoggedIn } = require("./middlewares");
 
 router.post("/", isLoggedIn, async (req, res, next) => {
   // POST / post
-  // console.log(`@@ post routers req.body: ${JSON.stringify(req.body)}`);
+  console.log(`@@ post routers req.body: ${JSON.stringify(req.body)}`);
   try {
     // 저장
     const post = await Post.create({
@@ -39,6 +39,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
         },
       ],
     });
+    console.log(`router post: ${fullPost}`);
     res.status(201).json(fullPost);
   } catch (error) {
     console.error(error);

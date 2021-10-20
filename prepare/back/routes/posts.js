@@ -49,7 +49,7 @@ router.get("/", async (req, res, next) => {
         },
       ],
     });
-    console.log(`posts: ${posts}`);
+    console.log(`router posts: ${posts}`);
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
