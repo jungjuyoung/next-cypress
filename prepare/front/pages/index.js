@@ -46,6 +46,7 @@ const Home = () => {
         }
       }
     }
+    onScroll();
     window.addEventListener("scroll", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
