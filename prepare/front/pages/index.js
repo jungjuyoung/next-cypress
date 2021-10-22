@@ -14,6 +14,7 @@ const Home = () => {
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
     state => state.post
   );
+
   console.log(`mainPosts: ${mainPosts}`);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const Home = () => {
   useEffect(() => {
     function onScroll() {
       if (
-        window.scrollY + document.documentElement.clientHeight >
+        window.pageYOffset + document.documentElement.clientHeight >
         document.documentElement.scrollHeight - 300
       ) {
         if (hasMorePosts && !loadPostsLoading) {
@@ -49,7 +50,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [mainPosts, hasMorePosts, loadPostsLoading]);
+  }, [hasMorePosts, loadPostsLoading, mainPosts]);
 
   return (
     <AppLayout>

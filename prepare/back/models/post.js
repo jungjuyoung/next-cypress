@@ -19,14 +19,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Post.associate = db => {
-    db.Post.belongsTo(db.User);
+    db.Post.belongsTo(db.User); //post.addUser, post.getUer, post.setUser
     db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" }); // post.addHashtags
-    db.Post.hasMany(db.Comment);
-    db.Post.hasMany(db.Image);
+    db.Post.hasMany(db.Comment); // post.addComments, post.getComments
+    db.Post.hasMany(db.Image); // post.addImages, post.getImages
     // through는 테이블 이름을 바꿔줌. through가 중간테이블 이름을 Like 테이블로 설정.
+    // post.addLikers, post.removeLikers
     db.Post.belongsToMany(db.User, { through: "Like", as: "Likers" });
     // **) 관계형에서  belongsTo는 테이블에 PostId를 생성
-    db.Post.belongsTo(db.Post, { as: "Retweet" });
+    db.Post.belongsTo(db.Post, { as: "Retweet" }); // post.addRetweet
   };
   return Post;
 };

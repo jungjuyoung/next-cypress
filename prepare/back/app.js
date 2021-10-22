@@ -46,13 +46,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", (req, res) => {
-  res.send("hello express...");
+  res.send("hello express");
 });
-
-app.use("/post", postRouter);
+// API는 다른 서비스가 내 서비스의 기능을 실행할 수 있게 열어둔 창구
 app.use("/posts", postsRouter);
+app.use("/post", postRouter);
 app.use("/user", userRouter);
 
 app.listen(5000, () => {
-  console.log(`server starting...`);
+  console.log(`서버 실행중...`);
 });
