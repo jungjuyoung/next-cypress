@@ -119,7 +119,7 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
   try {
     await Post.destroy({
       where: { id: req.params.postId },
-      UserId: req.user.id,
+      UserId: req.user.id, // 내가쓴 게시글일때 삭제
     });
     // console.log(`@@ req.params.postId type: ${typeof req.params.postId}`);
     res.status(200).json({ PostId: parseInt(req.params.postId, 10) });

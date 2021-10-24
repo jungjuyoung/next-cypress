@@ -133,10 +133,10 @@ router.patch("/nickname", isLoggedIn, async (req, res, next) => {
   try {
     await User.update(
       {
-        nickname: req.body.nickname,
+        nickname: req.body.nickname, // nickname수정
       },
       {
-        where: { id: req.user.id },
+        where: { id: req.user.id }, // 내 id의 nickname
       }
     );
     res.status(200).json({ nickname: req.body.nickname });
