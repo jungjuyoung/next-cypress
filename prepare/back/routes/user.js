@@ -1,8 +1,9 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
+const { Op } = require("sequelize");
 
-const { User, Post } = require("../models");
+const { User, Post, Comment, Image } = require("../models");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 const router = express.Router();
@@ -145,4 +146,95 @@ router.patch("/nickname", isLoggedIn, async (req, res, next) => {
     next(error);
   }
 });
+
+// 팔로워 목록 불러오기
+router.get("/followers", isLoggedIn, async (req, res, next) => {
+  // GET /user/followers
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (!user) {
+      return res.status(403).send("존재하지 않는 유저를 찾으려고 시도중....");
+    }
+    const followers = await user.getFollowers({
+      attributes: ["id", "nickname"],
+      limit: parseInt(req.query.limit, 10),
+    });
+    res.status(200).json(followers);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// 팔로윙즈 목록 불러오기
+router.get("/followings", isLoggedIn, async (req, res, next) => {
+  // GET /user/followings
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (!user) {
+      res.status(403).send("존재하지 않는 유저를 찾으려고 시도중....");
+    }
+    const followings = await user.getFollowings({
+      attributes: ["id", "nickname"],
+      limit: parseInt(req.query.limit, 10),
+    });
+    res.status(200).json(followings);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+// follow
+router.patch("/:userId/follow", isLoggedIn, async (req, res, next) => {
+  // PATCH / user / 1 / follow
+  try {
+    console.log(`@@ follow req.params.userId: ${typeof req.params.userId}`);
+    const user = await User.findOne({
+      where: {
+        id: req.params.userId,
+      },
+    });
+    if (!user) {
+      return res.status(403).send("존재하지 않는 유저를 팔로우 시도중...");
+    }
+    await user.addFollowers(req.user.id);
+    res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+// 언팔로우 unfollow
+router.delete("/:userId/follow", isLoggedIn, async (req, res, next) => {
+  // DELETE / user /1 / follow <- 언팔로우
+  console.log(`@@ unfollow req.params.userId: ${typeof req.params.userId}`);
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId } });
+    if (!user) {
+      res.status(403).send("존재하지 않는 유저를 언팔로우 시도중...");
+    }
+    await user.removeFollowers(req.user.id);
+    res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete("/follower/:userId", isLoggedIn, async (req, res, next) => {
+  // DELETE / user / follower / 2
+  try {
+    const user = await User.findOne({ where: { id: req.params.userId } });
+    if (!user) {
+      res.status(403).send("존재하지 않는 유저를 차단하려고 시도중....");
+    }
+    await user.removeFollowings(req.user.id);
+    res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;

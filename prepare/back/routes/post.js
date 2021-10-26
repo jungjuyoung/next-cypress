@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { Post, User, Comment, Image } = require("../models");
+const { Post, User, Comment, Image, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 
 router.post("/", isLoggedIn, async (req, res, next) => {
   // POST / post
-  console.log(`@@ post routers req.body: ${JSON.stringify(req.body)}`);
+  // console.log(`@@ post routers req.body: ${JSON.stringify(req.body)}`);
   try {
     // 저장
     const post = await Post.create({

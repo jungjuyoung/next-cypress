@@ -15,7 +15,7 @@ const Home = () => {
     state => state.post
   );
 
-  console.log(`mainPosts: ${mainPosts}`);
+  // console.log(`@@ mainPosts: ${JSON.stringify(mainPosts)}`);
 
   useEffect(() => {
     if (singUpDoneReset) {

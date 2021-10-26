@@ -1,63 +1,67 @@
 import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 
-import {
-  Card,
-  Button,
-  Avatar,
-  Form,
-  Input,
-  List,
-  Comment,
-  Popover,
-} from "antd";
+import { Card, Button, Avatar, List, Comment, Popover } from "antd";
 import {
   RetweetOutlined,
-  HeartTwoTone,
   HeartOutlined,
   MessageOutlined,
   EllipsisOutlined,
+  HeartTwoTone,
 } from "@ant-design/icons";
+import Link from "next/link";
 
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
-import FollowButton from "./FollowButton";
 import {
   LIKE_POST_REQUEST,
-  UNLIKE_POST_REQUEST,
   REMOVE_POST_REQUEST,
+  UNLIKE_POST_REQUEST,
+  RETWEET_REQUEST,
 } from "../reducers/post";
+import FollowButton from "./FollowButton";
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const { removePostLoading } = useSelector(state => state.post);
-  const id = useSelector(state => state.user.me?.id);
-  const liked = post.Likers.find(v => v.id === id);
   const [commentFormOpended, setCommentFormOpended] = useState(false);
+  const id = useSelector(state => state.user.me?.id);
+
   const onLike = useCallback(() => {
-    dispatch({
+    if (!id) {
+      return alert("로그인이 필요합니다.");
+    }
+    return dispatch({
       type: LIKE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
   const onUnlike = useCallback(() => {
-    dispatch({
+    if (!id) {
+      return alert("로그인이 필요합니다.");
+    }
+    return dispatch({
       type: UNLIKE_POST_REQUEST,
       data: post.id,
     });
+  }, [id]);
+  const onToggleComment = useCallback(() => {
+    setCommentFormOpened(prev => !prev);
   }, []);
-  const onToggleCommentOpened = useCallback(() => {
-    setCommentFormOpended(prev => !prev);
-  }, []);
+
   const onRemovePost = useCallback(() => {
-    dispatch({
+    if (!id) {
+      return alert("로그인이 필요합니다.");
+    }
+    return dispatch({
       type: REMOVE_POST_REQUEST,
       data: post.id,
     });
-  }, []);
+  }, [id]);
 
+  const liked = post.Likers.find(v => v.id === id);
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
@@ -73,9 +77,9 @@ const PostCard = ({ post }) => {
           ) : (
             <HeartOutlined key="heart" onClick={onLike} />
           ),
-          <MessageOutlined key="message" onClick={onToggleCommentOpened} />,
+          <MessageOutlined key="message" onClick={onToggleComment} />,
           <Popover
-            key="ellipsis"
+            key="more"
             content={
               <Button.Group>
                 {id && post.User.id === id ? (
@@ -114,7 +118,13 @@ const PostCard = ({ post }) => {
               <li>
                 <Comment
                   author={item.User.nickName}
-                  avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                  avatar={
+                    <Link href={`/user/${item.User.id}`}>
+                      <a>
+                        <Avatar>{item.User.nickname[0]}</Avatar>
+                      </a>
+                    </Link>
+                  }
                   content={item.content}
                 />
               </li>
