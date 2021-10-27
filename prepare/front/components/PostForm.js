@@ -1,17 +1,16 @@
-import React, { useEffect, useCallback, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useCallback, useEffect, useRef } from "react";
+import { Button, Form, Input } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Form, Input, Button } from "antd";
 import {
-  addPost,
   ADD_POST_REQUEST,
-  REMOVE_IMAGE,
   UPLOAD_IMAGES_REQUEST,
+  REMOVE_IMAGE,
 } from "../reducers/post";
 import useInput from "../hooks/useInput";
 
 const PostForm = () => {
-  const { addPostDone, imagePaths } = useSelector(state => state.post);
+  const { imagePaths, addPostDone } = useSelector(state => state.post);
   const dispatch = useDispatch();
   const [text, onChangeText, setText] = useInput("");
 
@@ -45,7 +44,6 @@ const PostForm = () => {
     console.log("images", e.target.files);
     const imageFormData = new FormData();
     [].forEach.call(e.target.files, f => {
-      console.log("f", f);
       imageFormData.append("image", f);
     });
     dispatch({
@@ -73,7 +71,7 @@ const PostForm = () => {
         value={text}
         onChange={onChangeText}
         maxLength={140}
-        placeholder="어떤 재밌는 일이 있었나요?"
+        placeholder="어떤 신기한 일이 있었나요?"
       />
       <div>
         <input
@@ -86,18 +84,22 @@ const PostForm = () => {
         />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
         <Button type="primary" style={{ float: "right" }} htmlType="submit">
-          쩩쩩
+          짹짹
         </Button>
       </div>
       <div>
-        {imagePaths.map(v => {
+        {imagePaths.map((v, i) => (
           <div key={v} style={{ display: "inline-block" }}>
-            <img src={v} style={{ width: "200px" }} alt={v} />
+            <img
+              src={`http://localhost:5000/${v}`}
+              style={{ width: "200px" }}
+              alt={v}
+            />
             <div>
-              <Button onClick={onRemoveImage}>제거</Button>
+              <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
-          </div>;
-        })}
+          </div>
+        ))}
       </div>
     </Form>
   );

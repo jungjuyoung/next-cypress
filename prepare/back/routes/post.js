@@ -45,7 +45,7 @@ router.post(
   }
 );
 
-router.post("/", isLoggedIn, async (req, res, next) => {
+router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   // POST / post
   // console.log(`@@ post routers req.body: ${JSON.stringify(req.body)}`);
   try {
@@ -54,6 +54,20 @@ router.post("/", isLoggedIn, async (req, res, next) => {
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        // 이미지를 여러개 올리면 imgae: [abc.png, zxc.png]
+        const images = await Promise.all(
+          req.body.image.map(img => Image.create({ src: img }))
+        );
+        await post.addImages(images);
+      } else {
+        // 이미지를 하나만 올리면 image: 이미지.png
+        const image = await Image.create({ src: req.body.image });
+        await post.addImages(image);
+      }
+    }
+
     // 방금 생성한 게시글 가져오기
     const fullPost = await Post.findOne({
       where: { id: post.id },

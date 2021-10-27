@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Slick from 'react-slick';
-import { Overlay, Header, CloseBtn, SlickWrapper, ImgWrapper, Indicator, Global } from './styles';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import Slick from "react-slick";
+import {
+  Overlay,
+  Header,
+  CloseBtn,
+  SlickWrapper,
+  ImgWrapper,
+  Indicator,
+  Global,
+} from "./styles";
 
 const ImagesZoom = ({ images, onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -21,20 +29,16 @@ const ImagesZoom = ({ images, onClose }) => {
             infinite
             arrows={false}
             slidesToShow={1}
-            slidesToScroll={1}
-          >
-            {images.map((v) => (
+            slidesToScroll={1}>
+            {images.map(v => (
               <ImgWrapper key={v.src}>
-                <img src={v.src} alt={v.src} />
+                <img src={`http://localhost:5000/${v.src}`} alt={v.src} />
               </ImgWrapper>
             ))}
           </Slick>
           <Indicator>
             <div>
-              {currentSlide + 1}
-              {' '}
-              /
-              {images.length}
+              {currentSlide + 1} /{images.length}
             </div>
           </Indicator>
         </div>
@@ -44,9 +48,11 @@ const ImagesZoom = ({ images, onClose }) => {
 };
 
 ImagesZoom.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
-    src: PropTypes.string,
-  })).isRequired,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string,
+    })
+  ).isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
