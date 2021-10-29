@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-
-import { Card, Button, Avatar, List, Comment, Popover } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { Card, Popover, Button, Avatar, List, Comment } from "antd";
 import {
   RetweetOutlined,
   HeartOutlined,
@@ -11,6 +10,7 @@ import {
   HeartTwoTone,
 } from "@ant-design/icons";
 import Link from "next/link";
+import moment from "moment";
 
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
@@ -23,10 +23,12 @@ import {
 } from "../reducers/post";
 import FollowButton from "./FollowButton";
 
+moment.locale("ko");
+
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const { removePostLoading } = useSelector(state => state.post);
-  const [commentFormOpended, setCommentFormOpended] = useState(false);
+  const [commentFormOpened, setCommentFormOpened] = useState(false);
   const id = useSelector(state => state.user.me?.id);
 
   const onLike = useCallback(() => {
@@ -61,13 +63,23 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
+  const onRetweet = useCallback(() => {
+    if (!id) {
+      return alert("로그인이 필요합니다.");
+    }
+    return dispatch({
+      type: RETWEET_REQUEST,
+      data: post.id,
+    });
+  }, [id]);
+
   const liked = post.Likers.find(v => v.id === id);
   return (
     <div style={{ marginBottom: 20 }}>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
-          <RetweetOutlined key="retweet" />,
+          <RetweetOutlined key="retweet" onClick={onRetweet} />,
           liked ? (
             <HeartTwoTone
               twoToneColor="#eb2f96"
@@ -77,7 +89,7 @@ const PostCard = ({ post }) => {
           ) : (
             <HeartOutlined key="heart" onClick={onLike} />
           ),
-          <MessageOutlined key="message" onClick={onToggleComment} />,
+          <MessageOutlined key="comment" onClick={onToggleComment} />,
           <Popover
             key="more"
             content={
@@ -100,24 +112,62 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
+        title={
+          post.RetweetId ? `${post.User.nickname}님이 리트윗하셨습니다.` : null
+        }
         extra={id && <FollowButton post={post} />}>
-        <Card.Meta
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickName}
-          description={<PostCardContent postData={post.content} />}
-        />
+        {post.RetweetId && post.Retweet ? (
+          <Card
+            cover={
+              post.Retweet.Images[0] && (
+                <PostImages images={post.Retweet.Images} />
+              )
+            }>
+            <span style={{ float: "right" }}>
+              {moment(post.createdAt).format("YYYY.MM.DD.")}
+            </span>
+            <Card.Meta
+              avatar={
+                <Link href={`/user/${post.Retweet.User.id}`}>
+                  <a>
+                    <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                  </a>
+                </Link>
+              }
+              title={post.Retweet.User.nickname}
+              description={<PostCardContent postData={post.Retweet.content} />}
+            />
+          </Card>
+        ) : (
+          <>
+            <span style={{ float: "right" }}>
+              {moment(post.createdAt).format("YYYY.MM.DD.")}
+            </span>
+            <Card.Meta
+              avatar={
+                <Link href={`/user/${post.User.id}`}>
+                  <a>
+                    <Avatar>{post.User.nickname[0]}</Avatar>
+                  </a>
+                </Link>
+              }
+              title={post.User.nickname}
+              description={<PostCardContent postData={post.content} />}
+            />
+          </>
+        )}
       </Card>
-      {commentFormOpended && (
+      {commentFormOpened && (
         <div>
           <CommentForm post={post} />
           <List
-            header={`${post.Comments.length} 댓글`}
+            header={`${post.Comments.length}개의 댓글`}
             itemLayout="horizontal"
             dataSource={post.Comments}
             renderItem={item => (
               <li>
                 <Comment
-                  author={item.User.nickName}
+                  author={item.User.nickname}
                   avatar={
                     <Link href={`/user/${item.User.id}`}>
                       <a>

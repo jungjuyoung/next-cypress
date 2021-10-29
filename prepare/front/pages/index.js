@@ -11,15 +11,20 @@ import { SIGN_UP_DONE_RESET, LOAD_MY_INFO_REQUEST } from "../reducers/user";
 const Home = () => {
   const dispatch = useDispatch();
   const { me, singUpDoneReset } = useSelector(state => state.user);
-  const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
-    state => state.post
-  );
+  const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } =
+    useSelector(state => state.post);
 
   // console.log(`
   // =====
   // @@ mainPosts: ${JSON.stringify(mainPosts)}
   // =====
   // `);
+
+  useEffect(() => {
+    if (retweetError) {
+      alert(retweetError);
+    }
+  }, [retweetError]);
 
   useEffect(() => {
     if (singUpDoneReset) {
