@@ -189,7 +189,10 @@ router.get("/followings", isLoggedIn, async (req, res, next) => {
 router.patch("/:userId/follow", isLoggedIn, async (req, res, next) => {
   // PATCH / user / 1 / follow
   try {
-    console.log(`@@ follow req.params.userId: ${typeof req.params.userId}`);
+    console.log(
+      `@@ follow req.params.userId:${req.params.userId} typeof: ${typeof req
+        .params.userId}`
+    );
     const user = await User.findOne({
       where: {
         id: req.params.userId,

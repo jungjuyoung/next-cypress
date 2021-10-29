@@ -10,6 +10,8 @@ const FollowButton = ({ post }) => {
     state => state.user
   );
   const isFollowing = me?.Followings.find(v => v.id === post.User.id);
+  console.log(`@@ post: ${JSON.stringify(post)}`);
+  console.log(`@@ me: ${JSON.stringify(me)}`);
   const onClickButton = useCallback(() => {
     if (isFollowing) {
       dispatch({

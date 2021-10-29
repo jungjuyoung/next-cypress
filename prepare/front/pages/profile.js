@@ -48,7 +48,7 @@ const Profile = () => {
   }
 
   if (!me) {
-    alert("로그인을 하지 않았습니다. 내 정보 로딩중....");
+    alert("로그인을 하지 않았습니다...");
     return "내 정보 로딩중...";
   }
   return (
