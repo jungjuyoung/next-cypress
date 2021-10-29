@@ -49,11 +49,20 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   // POST / post
   // console.log(`@@ post routers req.body: ${JSON.stringify(req.body)}`);
   try {
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
     // 저장
     const post = await Post.create({
       content: req.body.content,
       UserId: req.user.id,
     });
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map(tag =>
+          Hashtag.findOrCreate({ where: { name: tag.slice(1).toLowerCase() } })
+        )
+      ); // [[인생, true], [꽃길,true]]
+      await post.addHashtags(result.map(v => v[0]));
+    }
     if (req.body.image) {
       if (Array.isArray(req.body.image)) {
         // 이미지를 여러개 올리면 imgae: [abc.png, zxc.png]
