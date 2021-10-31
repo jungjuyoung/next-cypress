@@ -133,7 +133,7 @@ function* loadPost(action) {
     console.error(err);
     yield put({
       type: LOAD_POST_FAILURE,
-      error: err.response.data,
+      data: err.response.data,
     });
   }
 }

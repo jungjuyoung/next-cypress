@@ -164,12 +164,16 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res, next) => {
     if (!post) {
       return res.status(403).send("존재하지 않는 게시글입니다.");
     }
+    // === 자기 게시글 리트윗, 자기 게시글을 남이 리트윗 한 게시글에 자기가 다시 리트윗 막기
     if (
-      req.user.id === post.UserId ||
-      (post.Retweet && post.Retweet.UserId === req.user.id)
+      req.user.id === post.UserId || // 자기 게시글 리트윗,
+      (post.Retweet && post.Retweet.UserId === req.user.id) // 자기 게시글을 남이 리트윗 한 글을 자기가 다시 리트윗
     ) {
       return res.status(403).send("자신의 글은 리트윗할 수 없습니다.");
     }
+    // === 자기 게시글 리트윗, 자기 게시글을 남이 리트윗 한 게시글에 자기가 다시 리트윗 막기
+
+    // 다른 게시글을 리트윗한 게시글을 다시 리트윗
     const retweetTargetId = post.RetweetId || post.id;
     const exPost = await Post.findOne({
       where: {
