@@ -10,9 +10,12 @@ router.get("/", async (req, res, next) => {
   try {
     const where = {};
     if (parseInt(req.query.lastId, 10)) {
-      // 초기 로딩이 아닐 때
+      // 초기 로딩이 아닐 때 lastId기준으로 다음꺼 10개
+      // 예를 들어 12가 lastId면 12보다 작은거 10개
       where.id = { [Op.lt]: parseInt(req.query.lastId, 10) };
     } // 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1
+
+    // 초기 로딩 일떄 최신순으로 10개 불러오기
     const posts = await Post.findAll({
       where,
       limit: 10,
