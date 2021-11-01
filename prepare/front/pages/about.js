@@ -14,7 +14,7 @@ const About = () => {
   return (
     <AppLayout>
       <Head>
-        <title>ZeroCho | NodeBird</title>
+        <title>{userInfo.nickname} | NodeBird</title>
       </Head>
       {userInfo ? (
         <Card
