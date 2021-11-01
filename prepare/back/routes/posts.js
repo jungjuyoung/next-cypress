@@ -60,7 +60,7 @@ router.get("/", async (req, res, next) => {
         },
       ],
     });
-    console.log(`@@ posts: ${JSON.stringify(posts)}`);
+    // console.log(`@@ posts: ${JSON.stringify(posts)}`);
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
