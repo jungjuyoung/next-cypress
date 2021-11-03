@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import { Menu, Input, Row, Col } from "antd";
+import Router from "next/router";
 
 import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
 
 import styled, { createGlobalStyle } from "styled-components";
+import useInput from "../hooks/useInput";
 
 const { Search } = Input;
 
@@ -32,6 +34,10 @@ const SearchWrapper = styled(Search)`
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector(state => state.user);
+  const [searchInput, onChangeSearchInput] = useInput();
+  const onSearch = useCallback(() => {
+    Router.push(`/hashtag/${searchInput}`);
+  }, [searchInput]);
 
   return (
     <div>
@@ -48,7 +54,13 @@ const AppLayout = ({ children }) => {
           </Link>
         </Menu.Item>
         <Menu.Item>
-          <SearchWrapper placeholder="search title" enterButton="Search" />
+          <SearchWrapper
+            value={searchInput}
+            placeholder="search title"
+            enterButton="Search"
+            onChange={onChangeSearchInput}
+            onSearch={onSearch}
+          />
         </Menu.Item>
         <Menu.Item key="signup">
           <Link href="/signup">
@@ -67,8 +79,7 @@ const AppLayout = ({ children }) => {
           <a
             href="https://github.com/jungjuyoung"
             target="_blank"
-            rel="noreferrer noopener"
-          >
+            rel="noreferrer noopener">
             Nadia Github
           </a>
         </Col>
