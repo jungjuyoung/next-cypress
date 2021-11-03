@@ -12,6 +12,7 @@ import FollowList from "../components/FollowList";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 
+// fetcher util로 빼서 swr하는곳에서 불러서 사용해도 됌.
 const fetcher = url =>
   axios.get(url, { withCredentials: true }).then(result => result.data);
 
@@ -42,15 +43,16 @@ const Profile = () => {
     setFollowingsLimit(prev => prev + 3);
   }, []);
 
+  if (!me) {
+    alert("로그인을 하지 않았습니다...");
+    return "내 정보 로딩중...";
+  }
+
   if (followerError || followingError) {
     console.error(followerError || followingError);
     return "팔로잉/팔로워 로딩 중 에러가 발생했습니다.";
   }
 
-  if (!me) {
-    alert("로그인을 하지 않았습니다...");
-    return "내 정보 로딩중...";
-  }
   return (
     <>
       <Head>

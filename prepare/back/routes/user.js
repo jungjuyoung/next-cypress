@@ -47,6 +47,7 @@ router.get("/", async (req, res, next) => {
 
 // 팔로워 목록 불러오기
 router.get("/followers", isLoggedIn, async (req, res, next) => {
+  console.log(`@@ followers req.query: ${JSON.stringify(req.query)}`);
   // GET /user/followers
   try {
     const user = await User.findOne({ where: { id: req.user.id } });
