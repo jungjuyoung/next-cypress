@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "next -p 3060",
+    "build": "NODE_ENV=production ANALYZE=true next build",
     "cypress:open": "cypress open",
     "test": "start-server-and-test dev 3000 cypress:open"
   },
@@ -13,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
+    "@next/bundle-analyzer": "^12.0.2",
     "antd": "^4.16.13",
     "axios": "^0.21.4",
     "babel-plugin-styled-components": "^1.13.3",

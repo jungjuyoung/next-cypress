@@ -30,7 +30,6 @@ const PostCard = ({ post }) => {
   const { removePostLoading } = useSelector(state => state.post);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const id = useSelector(state => state.user.me?.id);
-
   const onLike = useCallback(() => {
     if (!id) {
       return alert("로그인이 필요합니다.");
