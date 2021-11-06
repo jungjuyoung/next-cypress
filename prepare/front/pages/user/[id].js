@@ -20,7 +20,7 @@ const User = () => {
     state => state.post
   );
   const { userInfo } = useSelector(state => state.user);
-
+  console.log(`@@ userInfo: ${JSON.stringify(userInfo)}`);
   useEffect(() => {
     const onScroll = () => {
       if (
@@ -104,6 +104,7 @@ const User = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(async context => {
+  console.log(`getServerSideProps context: ${context}`);
   const cookie = context.req ? context.req.headers.cookie : "";
   axios.defaults.headers.Cookie = "";
   if (context.req && cookie) {
@@ -122,7 +123,6 @@ export const getServerSideProps = wrapper.getServerSideProps(async context => {
   });
   context.store.dispatch(END);
   await context.store.sagaTask.toPromise();
-  console.log("getState", context.store.getState().post.mainPosts);
   return { props: {} };
 });
 

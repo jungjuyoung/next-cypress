@@ -15,7 +15,7 @@ const Home = () => {
   const { me, singUpDoneReset } = useSelector(state => state.user);
   const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } =
     useSelector(state => state.post);
-
+  console.log(`@@ Home component mainPosts: ${JSON.stringify(mainPosts)}`);
   useEffect(() => {
     if (singUpDoneReset) {
       dispatch({
