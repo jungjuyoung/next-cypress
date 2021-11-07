@@ -1,11 +1,11 @@
 /// <reference types="cypress"/>
 
-context("Home Page", () => {
+context("Home Page open", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3060");
   });
 
-  it("should find our SEO title", () => {
+  it("Should find our SEO title", () => {
     cy.get("title").contains("React Twitter Clone Coding");
   });
 
