@@ -28,58 +28,6 @@ const upload = multer({
   }),
   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
 });
-// 이미지 업로드
-router.post(
-  "/images",
-  isLoggedIn,
-  upload.array("image"),
-  async (req, res, next) => {
-    // POST / post / images
-    try {
-      console.log(req.files);
-      res.json(req.files.map(v => v.filename));
-    } catch (error) {
-      console.error(error);
-      next(error);
-    }
-  }
-);
-
-router.get("/:postId", async (req, res, next) => {
-  try {
-    const post = await Post.findOne({
-      where: { id: req.params.postId },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "nickname"],
-        },
-        {
-          model: Image,
-        },
-        {
-          model: Comment,
-          include: [
-            {
-              model: User,
-              attributes: ["id", "nickname"],
-              order: [["createdAt", "DESC"]],
-            },
-          ],
-        },
-        {
-          model: User, // 좋아요 누른 사람
-          as: "Likers",
-          attributes: ["id"],
-        },
-      ],
-    });
-    res.status(200).json(post);
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
 
 router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   // POST / post
@@ -148,35 +96,72 @@ router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
   }
 });
 
-router.patch("/:postId/like", isLoggedIn, async (req, res, next) => {
-  // PATCH / post / 1 / like
-  try {
-    const post = await Post.findOne({
-      where: {
-        id: req.params.postId,
-      },
-    });
-    if (!post) {
-      return res.status(403).send("존재하지 않는 게시글 입니다.");
+// 이미지 업로드
+router.post(
+  "/images",
+  isLoggedIn,
+  upload.array("image"),
+  async (req, res, next) => {
+    // POST / post / images
+    try {
+      console.log(req.files);
+      res.json(req.files.map(v => v.filename));
+    } catch (error) {
+      console.error(error);
+      next(error);
     }
-    await post.addLikers(req.user.id);
-    res.json({ PostId: post.id, UserId: req.user.id });
-  } catch (error) {
-    console.error(error);
-    next(error);
   }
-});
-router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
-  // DELETE / post / 1 / like
+);
+
+router.get("/:postId", async (req, res, next) => {
+  // GET /post/1
   try {
     const post = await Post.findOne({
       where: { id: req.params.postId },
     });
     if (!post) {
-      return res.status(403).send("존재하지 않는 게시글 입니다.");
+      return res.status(404).send("존재하지 않는 게시글입니다.");
     }
-    await post.removeLikers(req.user.id);
-    res.json({ PostId: post.id, UserId: req.user.id });
+    const fullPost = await Post.findOne({
+      where: { id: post.id },
+      include: [
+        {
+          model: Post,
+          as: "Retweet",
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+            {
+              model: Image,
+            },
+          ],
+        },
+        {
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: User,
+          as: "Likers",
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+          ],
+        },
+      ],
+    });
+    res.status(200).json(fullPost);
   } catch (error) {
     console.error(error);
     next(error);
@@ -285,7 +270,7 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     }
     const comment = await Comment.create({
       content: req.body.content,
-      PostId: req.params.postId,
+      PostId: parseInt(req.params.postId, 10),
       UserId: req.user.id,
     });
     const fullComment = await Comment.findOne({
@@ -298,6 +283,79 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
       ],
     });
     res.status(201).json(fullComment);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.patch("/:postId/like", isLoggedIn, async (req, res, next) => {
+  // PATCH / post / 1 / like
+  try {
+    const post = await Post.findOne({
+      where: {
+        id: req.params.postId,
+      },
+    });
+    if (!post) {
+      return res.status(403).send("존재하지 않는 게시글 입니다.");
+    }
+    await post.addLikers(req.user.id);
+    res.json({ PostId: post.id, UserId: req.user.id });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
+  // DELETE / post / 1 / like
+  try {
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+    });
+    if (!post) {
+      return res.status(403).send("존재하지 않는 게시글 입니다.");
+    }
+    await post.removeLikers(req.user.id);
+    res.json({ PostId: post.id, UserId: req.user.id });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.patch("/:postId", isLoggedIn, async (req, res, next) => {
+  // PATCH / post / 1
+  const hashtags = req.body.content.match(/#[^\s#]+/g);
+
+  try {
+    await Post.update(
+      {
+        content: req.body.content,
+      },
+      {
+        where: { id: req.params.postId },
+        UserId: req.user.id, // 내가쓴 게시글일때 삭제
+      }
+    );
+    const post = await Post.findOne({
+      where: {
+        id: req.params.postId,
+      },
+    });
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map(tag =>
+          Hashtag.findOrCreate({ where: { name: tag.slice(1).toLowerCase() } })
+        )
+      ); // [[인생, true], [꽃길,true]]
+      await post.setHashtags(result.map(v => v[0]));
+    }
+    res.status(200).json({
+      PostId: parseInt(req.params.postId, 10),
+      content: req.body.content,
+    });
   } catch (error) {
     console.error(error);
     next(error);
